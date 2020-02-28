@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-// const routes = [
+const routes = [
 //   {
 //     path: '/about',
 //     name: 'About',
@@ -13,12 +13,12 @@ Vue.use(VueRouter)
 //     // which is lazy-loaded when the route is visited.
 //     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
 //   }
-// ]
+]
 
-// const router = new VueRouter({
-//   mode: 'history',
-//   base: process.env.BASE_URL,
-//   routes
-// })
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
 
-// export default router
+export default router
