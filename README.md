@@ -22,3 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Form Validation  
+https://vuetifyjs.com/en/components/text-fields#custom-validation
