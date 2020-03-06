@@ -3,11 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import AddBeerDialog from './components/AddBeerDialog.vue'
 
 Vue.config.productionTip = false
-
-Vue.component('app-add-beer-dialog', AddBeerDialog)
 
 new Vue({
   router,

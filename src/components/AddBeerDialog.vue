@@ -1,15 +1,16 @@
 <template>
-  <v-dialog persistent v-model="addBeerDialog">
+  <v-dialog v-model="addBeerDialog" max-width="600px">
     <template v-slot:activator="{ on }">
       <v-btn dark rounded color="teal" v-on="on">Ajouter une bière</v-btn>
     </template>
+
     <v-card>
       <v-container>
-        <v-layout row>
+        <v-layout row wrap>
           <v-flex xs12>
             <v-form>
               <v-layout row>
-                <v-flex xs12 sm6 offset-sm3>
+                <v-flex xs10 offset-xs1>
                   <p class="headline">Ajouter une bière</p>
                   <v-divider></v-divider>
                   <br />
@@ -32,8 +33,9 @@
                     <v-flex xs12>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="gray" outline @click="onSaveChanges">Annuler</v-btn>
-                        <v-btn color="teal white--text" outline @click="editDialog = false">Ajouter</v-btn>
+                        <!-- onSaveChanges -->
+                        <v-btn color="grey white--text darken-1" outline>Annuler</v-btn>
+                        <v-btn color="blue white--text " outline @click="onSave">Ajouter</v-btn>
                       </v-card-actions>
                     </v-flex>
                   </v-layout>
@@ -70,6 +72,24 @@ export default {
         field => field.length > 0 || 'This field required',
         field => field.length <= 50 || 'Max 50 characters'
       ]
+    }
+  },
+  methods: {
+    onSave() {
+      console.log(
+        'name: ' +
+          this.name +
+          '\ncomment: ' +
+          this.comment +
+          '\npht: ' +
+          this.pht +
+          '\ndegree: ' +
+          this.degree +
+          '\ntype: ' +
+          this.type +
+          '\nowner: ' +
+          this.owner
+      )
     }
   }
 }

@@ -4,7 +4,7 @@
       <v-flex xs12>
         <div>
           <span class="headline font-weight-bold mr-5">Liste des bières</span>
-          <app-add-beer-dialog></app-add-beer-dialog>
+          <!-- <app-add-beer-dialog></app-add-beer-dialog> -->
         </div>
         <br />
         <v-data-table :headers="headers" :items="beers" :items-per-page="5" class="elevation-1"></v-data-table>
