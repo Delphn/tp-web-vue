@@ -7,7 +7,7 @@
           <!-- <app-add-beer-dialog></app-add-beer-dialog> -->
         </div>
         <br />
-        <v-data-table :headers="headers" :items="beers" :items-per-page="5" class="elevation-1"></v-data-table>
+        <v-data-table :headers="headers" :items="loadedBeers" :items-per-page="5" class="elevation-1"></v-data-table>
       </v-flex>
     </v-layout>
   </v-container>
@@ -21,9 +21,7 @@ export default {
       headers: [
         {
           text: 'Identifiant',
-          align: 'left',
-          sortable: false,
-          value: 'name'
+          value: 'id'
         },
         { text: 'Nom', value: 'name' },
         { text: 'Commentaire', value: 'comment' },
@@ -32,27 +30,12 @@ export default {
         { text: "Degré d'alcool", value: 'degree' },
         { text: 'Type', value: 'type' },
         { text: 'Propriétaire', value: 'owner' }
-      ],
-      beers: [
-        {
-          name: 'Lager',
-          comment: 'Pas mal comme bière',
-          pht: 6.0,
-          ptt: 7.2,
-          degree: 4,
-          type: 'Lager',
-          owner: 'Carlsberg Beer'
-        },
-        {
-          name: 'Miller lite',
-          comment: 'Commentaire bière',
-          pht: 8.0,
-          ptt: 9.6,
-          degree: 10,
-          type: 'Miller',
-          owner: 'My Beer'
-        }
       ]
+    }
+  },
+  computed: {
+    loadedBeers() {
+      return this.$store.getters.loadedBeers
     }
   }
 }
