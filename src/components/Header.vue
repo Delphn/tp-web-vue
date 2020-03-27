@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="sideNav = !sideNav" class="hidden-sm-and-up mr-1"></v-app-bar-nav-icon>
       <v-layout align-center>
         <v-spacer></v-spacer>
-        <v-text-field class="blue lighten-1 pr-2" placeholder="Search" hide-details solo-inverted append-outer-icon="search" flat />
+        <v-text-field class="blue darken-2 pr-2" placeholder="Search" hide-details solo-inverted append-outer-icon="search" flat />
 
         <v-spacer></v-spacer>
 
