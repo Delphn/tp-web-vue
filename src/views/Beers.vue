@@ -8,14 +8,13 @@
         <br />
         <v-data-table :headers="headers" :items="loadedBeers" :items-per-page="5" class="elevation-2">
           <!-- Custom column in table for PrixTTC Calculation -->
-          <template v-slot:item.ttc="{item}">
+          <template v-slot:item.ttc="{ item }">
             <div>
               <!-- PrixTTC Component -->
               <PrixTTC :editale="false" :prixHT="item.pht" />
             </div>
           </template>
         </v-data-table>
-
       </v-flex>
     </v-layout>
   </v-container>
