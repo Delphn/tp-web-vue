@@ -1,15 +1,17 @@
 <template>
   <v-app>
-    <!-- <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <p class="headline font-weight-bold">TP1</p>
-      </div>
-    </v-app-bar> -->
+
+    <!-- Header -->
     <Header />
 
+    <!-- Main view -->
     <v-content>
       <router-view></router-view>
     </v-content>
+
+    <!--Footer  -->
+    <Footer />
+
   </v-app>
 </template>
 
@@ -20,7 +22,8 @@ export default {
   name: 'App',
 
   components: {
-    Header: () => import('@/components/Header')
+    Header: () => import('@/components/Header'),
+    Footer: () => import('@/components/Footer')
   },
 
   data: () => ({

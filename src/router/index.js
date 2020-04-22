@@ -13,8 +13,10 @@ const routes = [
   {
     path: '/add-beer',
     name: 'AddBeer',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/AddBeer.vue')
-  }
+    component: () =>
+      import(/* webpackChunkName: "about" */ '@/views/AddBeer.vue')
+  },
+  { path: '*', component: Beers }
 ]
 
 const router = new VueRouter({

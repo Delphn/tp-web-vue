@@ -3,64 +3,101 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const defaultBeers = [
+  {
+    id: 1,
+    name: 'Lager',
+    comment: 'Pas mal comme bière',
+    pht: 6.0,
+    ptt: 7.2,
+    degree: 4,
+    type: 'Lager',
+    owner: 'Carlsberg Beer'
+  },
+  {
+    id: 2,
+    name: 'Miller lite',
+    comment: 'Commentaire bière',
+    pht: 8.0,
+    ptt: 9.6,
+    degree: 10,
+    type: 'Miller',
+    owner: 'My Beer'
+  }
+]
+
 export default new Vuex.Store({
   state: {
-    loadedBeers: []
+    loadedBeers: defaultBeers,
+    nom: 'Rukundo Delphin'
   },
   mutations: {
     setLoadedBeers(state, payload) {
       state.loadedBeers = payload
     },
-    createBeer(state, payload) {
-      state.loadedBeers.push(payload)
+    addBeer(state, payload) {
+      const beerId = state.loadedBeers.length + 1
+      state.loadedBeers.push({ id: beerId, ...payload })
     },
-    updateOffer(state, payload) {
-      const offer = state.loadedOffers.find((offer) => {
-        // console.log('offer Id ', offer.id)
-        return offer.id === payload.id
+    updateBeer(state, payload) {
+      const beer = state.loadedBeers.find((beer) => {
+        // console.log('beer Id ', beer.id)
+        // return beer.id === payload.id
       })
-      // console.log('offer', offer)
-      // refactor this to switch case later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if (payload.title) {
-        offer.title = payload.title
+        beer.title = payload.title
       }
       if (payload.image) {
-        offer.imageUrl = payload.image
+        beer.imageUrl = payload.image
       }
       if (payload.priceDetails) {
-        offer.priceDetails = payload.priceDetails
+        beer.priceDetails = payload.priceDetails
       }
       if (payload.coverage) {
-        offer.coverage = payload.coverage
+        beer.coverage = payload.coverage
       }
       if (payload.description) {
-        offer.description = payload.description
+        beer.description = payload.description
       }
       if (payload.location) {
-        offer.location = payload.location
+        beer.location = payload.location
       }
       if (payload.level) {
-        offer.level = payload.level
+        beer.level = payload.level
       }
       if (payload.program) {
-        offer.program = payload.program
+        beer.program = payload.program
       }
       if (payload.language) {
-        offer.language = payload.language
+        beer.language = payload.language
       }
       if (payload.date) {
-        offer.date = payload.date
+        beer.date = payload.date
       }
     }
   },
   actions: {
     loadedBeers({ commit }, payload) {
       commit('setLoadedBeers', payload)
+    },
+    createBeer({ commit }, payload) {
+      console.log(payload)
+      commit('addBeer', payload)
     }
   },
   getters: {
-    beer(state) {
-      return state.beer
+    loadedBeers(state) {
+      return state.loadedBeers
+    },
+    loadedBeer(state) {
+      return (beerId) => {
+        return state.loadedBeers.find((beer) => {
+          return beer.id === beerId
+        })
+      }
+    },
+    nom(state) {
+      return state.nom
     }
   }
 })
