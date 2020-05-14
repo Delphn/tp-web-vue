@@ -3,24 +3,24 @@
     <v-container>
       <v-form @submit.prevent="onAddBeer" ref="form" v-model="valid">
         <v-layout row wrap>
-          <v-flex xs10 offset-xs1 sm8 offset-sm2>
+          <v-flex xs10 offset-xs1 sm8 offset-sm2 md4 offset-md4>
             <p class="headline">Ajouter une bière</p>
             <v-divider></v-divider>
             <br />
             <!-- Nom de la bière -->
-            <v-text-field :rules="fieldRules('Nom')" v-model="name" name="name" label="Nom" outlined autofocus></v-text-field>
+            <v-text-field type="text" :rules="fieldRules('nom')" v-model="beer.name" name="name" label="Nom" outlined autofocus></v-text-field>
             <!-- Commentaire -->
-            <v-textarea :rules="fieldRules('Commentaire')" v-model="comment" name="commnet" label="Commentaire" outlined required></v-textarea>
+            <v-textarea type="text" v-model="beer.comment" name="commnet" label="Commentaire" outlined required></v-textarea>
             <!-- Prix Hors Taxe -->
-            <v-text-field type="number" :rules="fieldRules('Prix HT')" v-model="pht" name="pht" label="Prix HT" outlined></v-text-field>
-            <!-- PrixTTC Component -->
-            <PrixTTC :editable="true" :prixHT="Number(pht)" @update-pht="updatePht" />
+            <v-text-field type="number" step='0.01' :rules="fieldRules('prix')" v-model="beer.priceHT" name="priceHT" label="Prix HT" outlined></v-text-field>
+            <!-- Prix TTC Component -->
+            <priceTTC :editable="true" :priceHt="Number(beer.priceHT)" @update-priceHT="updatePht" />
             <!-- Degré d'alcool -->
-            <v-text-field type="number" :rules="fieldRules('Degré d\'alcool')" v-model="degree" name="degree" label="Degré d'alcool" outlined></v-text-field>
+            <v-text-field type="number" min="0" max="70" :rules="validDegree" v-model="beer.alcoholDegree" name="alcoholDegree" label="Degré d'alcool" outlined></v-text-field>
             <!-- Type -->
-            <v-select v-model="type" :items="beerTypes" label="Item" outlined required></v-select>
+            <v-select v-model="beer.type" :rules="validType" :items="beerTypes" label="Type" outlined required></v-select>
             <!-- Propriétaire -->
-            <v-text-field :rules="fieldRules('Propriétaire')" v-model="owner" name="owner" label="Propriétaire" outlined></v-text-field>
+            <v-text-field :rules="fieldRules('propriétaire')" v-model="beer.owner" name="owner" label="Propriétaire" outlined></v-text-field>
             <v-divider></v-divider>
             <v-layout row wrap>
               <v-flex xs12>
@@ -41,45 +41,55 @@
 <script>
 import store from '@/store'
 import router from '@/router'
+import { mapGetters } from 'vuex'
 export default {
   name: 'AddBeer',
-  components: { PrixTTC: () => import('@/components/PrixTTC') },
+  components: { priceTTC: () => import('@/components/PriceTTC') },
   data: () => ({
-    name: '',
-    comment: '',
-    pht: null,
-    degree: null,
-    type: '',
-    owner: '',
-    beerTypes: ['type0', 'type1', 'type2'],
-    valid: true
+    beer: {
+      name: '',
+      comment: '',
+      priceHT: null,
+      alcoholDegree: null,
+      type: '',
+      owner: ''
+    },
+    beerTypes: ['DARK', 'BLONDE', 'IPA', 'BROWN'],
+    valid: true,
+    isUpdate: false
   }),
   computed: {
+    ...mapGetters(['currentBeer']),
     fieldRules() {
-      return fieldName => [v => !!v || `${fieldName} is required`]
+      return name => [v => !!v || `Le ${name} est obligatoire`]
     },
-    ttc() {
-      return null
+    validDegree() {
+      return [
+        v => !!v || "Le degré d'alcool est obligatoire",
+        v => v >= 0 || "Le degré d'alcool peut pas être négatif",
+        v => v <= 70 || "Le degré d'alcool peut pas être superieur à 70"
+      ]
+    },
+    validType() {
+      return [
+        v => !!v || "Le type d'alcool est obligatoire",
+        v =>
+          v === 'DARK' ||
+          v === 'BLONDE' ||
+          v === 'IPA' ||
+          v === 'BROWN' ||
+          "Le type d'alcool doit être d'une des valeurs suivantes DARK, BLONDE, IPA, BROWN"
+      ]
     }
   },
   methods: {
     updatePht(val) {
-      console.log('updatedPht: ', val)
-      this.pht = val
+      this.beer.priceHT = val
     },
     onAddBeer() {
       // validate text fields
       if (this.$refs.form.validate()) {
-        const beer = {
-          name: this.name,
-          comment: this.comment,
-          pht: this.pht,
-          ttc: this.ttc,
-          degree: this.degree,
-          type: this.type,
-          owner: this.owner
-        }
-        store.dispatch('createBeer', beer)
+        store.dispatch('createBeer', this.beer)
         router.push('/')
       }
     }

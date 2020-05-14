@@ -3,101 +3,52 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const defaultBeers = [
-  {
-    id: 1,
-    name: 'Lager',
-    comment: 'Pas mal comme bière',
-    pht: 6.0,
-    ptt: 7.2,
-    degree: 4,
-    type: 'Lager',
-    owner: 'Carlsberg Beer'
-  },
-  {
-    id: 2,
-    name: 'Miller lite',
-    comment: 'Commentaire bière',
-    pht: 8.0,
-    ptt: 9.6,
-    degree: 10,
-    type: 'Miller',
-    owner: 'My Beer'
-  }
-]
-
 export default new Vuex.Store({
   state: {
-    loadedBeers: defaultBeers,
+    beers: [],
+    currentBeer: null,
     nom: 'Rukundo Delphin'
   },
   mutations: {
-    setLoadedBeers(state, payload) {
-      state.loadedBeers = payload
+    addBeer(state, beer) {
+      const beerId = state.beers.length + 1
+      state.beers.push({ id: beerId, ...beer })
     },
-    addBeer(state, payload) {
-      const beerId = state.loadedBeers.length + 1
-      state.loadedBeers.push({ id: beerId, ...payload })
+    updateBeer(state, beer) {
+      let beerToUpdate = state.beers.find((item) => item.id === beer.id)
+      if (beerToUpdate) {
+        beerToUpdate = beer
+      }
     },
-    updateBeer(state, payload) {
-      const beer = state.loadedBeers.find((beer) => {
-        // console.log('beer Id ', beer.id)
-        // return beer.id === payload.id
-      })
-      if (payload.title) {
-        beer.title = payload.title
-      }
-      if (payload.image) {
-        beer.imageUrl = payload.image
-      }
-      if (payload.priceDetails) {
-        beer.priceDetails = payload.priceDetails
-      }
-      if (payload.coverage) {
-        beer.coverage = payload.coverage
-      }
-      if (payload.description) {
-        beer.description = payload.description
-      }
-      if (payload.location) {
-        beer.location = payload.location
-      }
-      if (payload.level) {
-        beer.level = payload.level
-      }
-      if (payload.program) {
-        beer.program = payload.program
-      }
-      if (payload.language) {
-        beer.language = payload.language
-      }
-      if (payload.date) {
-        beer.date = payload.date
-      }
+    setCurrentBeer(state, beer) {
+      state.currentBeer = beer
+    },
+    resetCurrentBeer(state) {
+      state.currentBeer = null
     }
   },
+  //   Les types de bière sont récupérées dynamiquement via l’API et permettent
+  // d’alimenter la liste déroulante.
+  // if error while retrieving beers show “Impossible de récupérer les bières”  in a red alert box
+  // if error while adding a beer show “Impossible d’ajouter la bière Nom” in a red alert box
+  // if beer added successfully show “Bière ajoutée” in a green snackbar
   actions: {
-    loadedBeers({ commit }, payload) {
-      commit('setLoadedBeers', payload)
-    },
     createBeer({ commit }, payload) {
-      console.log(payload)
       commit('addBeer', payload)
+    },
+    resetCurrentBeer(state) {
+      state.currentBeer = null
     }
   },
   getters: {
-    loadedBeers(state) {
-      return state.loadedBeers
-    },
-    loadedBeer(state) {
-      return (beerId) => {
-        return state.loadedBeers.find((beer) => {
-          return beer.id === beerId
-        })
-      }
+    beers(state) {
+      return state.beers
     },
     nom(state) {
       return state.nom
+    },
+    currentBeer(state) {
+      return state.currentBeer
     }
   }
 })
