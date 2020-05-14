@@ -21,14 +21,25 @@
             <!-- priceTTC Component -->
             <priceTTC :editale="false" :priceHt="Number(item.priceHT)" />
           </template>
+          <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="updateBeer(item)">
+              mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteBeer(item)">
+              mdi-delete
+            </v-icon>
+          </template>
         </v-data-table>
+        <!-- <v-btn color="info" @click="getBeers">getBeers</v-btn> -->
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import store from '@/store'
 import { mapGetters } from 'vuex'
+
 export default {
   components: { priceTTC: () => import('@/components/PriceTTC') },
   data() {
@@ -45,14 +56,27 @@ export default {
         { text: 'Prix TTC', value: 'priceTTC' },
         { text: "Degré d'alcool", value: 'alcoholDegree' },
         { text: 'Type', value: 'type' },
-        { text: 'Propriétaire', value: 'owner' }
+        { text: 'Propriétaire', value: 'owner' },
+        { text: 'Actions', value: 'actions', sortable: false }
       ]
     }
   },
   computed: {
     ...mapGetters(['beers'])
   },
-  methods: {},
+  methods: {
+    updateBeer(beer) {
+      store.commit('setCurrentBeer', beer)
+      this.$router.push('/add-beer')
+    },
+    deleteBeer(beer) {
+      confirm('Êtes-vous sûr de vouloir supprimer cette bière?') &&
+        store.commit('deleteBeer', beer)
+    }
+    // getBeers() {
+    //   store.dispatch('getBeers')
+    // }
+  },
   filters: {
     capitalize(value) {
       if (!value) return ''

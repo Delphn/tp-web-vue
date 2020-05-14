@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-form @submit.prevent="onAddBeer" ref="form" v-model="valid">
+      <v-form @submit.prevent="saveBeer" ref="form" v-model="valid">
         <v-layout row wrap>
           <v-flex xs10 offset-xs1 sm8 offset-sm2 md4 offset-md4>
             <p class="headline">Ajouter une bière</p>
@@ -27,7 +27,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="grey white--text darken-2" to="/">Annuler</v-btn>
-                  <v-btn color="blue white--text" type="submit">Ajouter</v-btn>
+                  <v-btn color="blue white--text" type="submit">Sauvegarder</v-btn>
                 </v-card-actions>
               </v-flex>
             </v-layout>
@@ -86,12 +86,23 @@ export default {
     updatePht(val) {
       this.beer.priceHT = val
     },
-    onAddBeer() {
+    saveBeer() {
       // validate text fields
       if (this.$refs.form.validate()) {
-        store.dispatch('createBeer', this.beer)
+        if (this.isUpdate) {
+          this.$store.commit('updateBeer', this.beer)
+          this.$store.commit('resetCurrentBeer')
+        } else {
+          store.dispatch('createBeer', this.beer)
+        }
         router.push('/')
       }
+    }
+  },
+  mounted() {
+    if (this.currentBeer) {
+      this.beer = this.currentBeer
+      this.isUpdate = true
     }
   }
 }

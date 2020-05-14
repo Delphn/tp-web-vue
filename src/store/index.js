@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import BeerService from '@/services/BeerService'
 
 Vue.use(Vuex)
 
@@ -7,7 +8,8 @@ export default new Vuex.Store({
   state: {
     beers: [],
     currentBeer: null,
-    nom: 'Rukundo Delphin'
+    nom: 'Rukundo Delphin',
+    BeerService: new BeerService('rukundo')
   },
   mutations: {
     addBeer(state, beer) {
@@ -19,6 +21,10 @@ export default new Vuex.Store({
       if (beerToUpdate) {
         beerToUpdate = beer
       }
+    },
+    deleteBeer(state, beer) {
+      const index = state.beers.indexOf(beer)
+      state.beers.splice(index, 1)
     },
     setCurrentBeer(state, beer) {
       state.currentBeer = beer
@@ -36,8 +42,8 @@ export default new Vuex.Store({
     createBeer({ commit }, payload) {
       commit('addBeer', payload)
     },
-    resetCurrentBeer(state) {
-      state.currentBeer = null
+    getBeers({ state }) {
+      state.BeerService.getBeers().then((data) => console.log(data))
     }
   },
   getters: {

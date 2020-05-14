@@ -4,6 +4,7 @@ export default class Beer {
   }
 
   getBeers() {
+    console.log(this.owner)
     return this.$http.get(
       `http://163.172.53.19:8081/api/beers?owner=${this.owner}`
     )
