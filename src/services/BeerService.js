@@ -1,40 +1,32 @@
+import Vue from 'vue'
+
 export default class Beer {
-  constructor(owner) {
+  constructor(owner, url) {
     this.owner = owner
+    this.url = url
   }
 
   getBeers() {
-    console.log(this.owner)
-    return this.$http.get(
-      `http://163.172.53.19:8081/api/beers?owner=${this.owner}`
-    )
+    return Vue.http.get(`${this.url}?owner=${this.owner}`)
   }
 
-  createBeer() {
-    return this.$http.post(
-      `http://163.172.53.19:8081/api/beers?owner=${this.owner}`
-    )
+  createBeer(beer) {
+    return Vue.http.post(`${this.url}?owner=${this.owner}`, beer)
   }
 
   getBeer(id) {
-    return this.$http.get(
-      `http://163.172.53.19:8081/api/beers?owner=${this.owner}/{${id}}`
-    )
+    return Vue.http.get(`${this.url}/${id}?owner=${this.owner}`)
   }
 
-  updateBeer(id) {
-    return this.$http.put(
-      `http://163.172.53.19:8081/api/beers?owner=${this.owner}/{${id}}`
-    )
+  updateBeer(beer) {
+    return Vue.http.put(`${this.url}/${beer.id}?owner=${this.owner}`, beer)
   }
 
   deleteBeer(id) {
-    return this.$http.delete(
-      `http://163.172.53.19:8081/api/beers?owner=${this.owner}/{${id}}`
-    )
+    return Vue.http.delete(`${this.url}/${id}?owner=${this.owner}`)
   }
 
   getTypes() {
-    return this.$http.get('http://163.172.53.19:8081/api/beers/types')
+    return Vue.http.get(`${this.url}/types`)
   }
 }

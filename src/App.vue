@@ -8,6 +8,12 @@
     <v-content>
       <router-view></router-view>
     </v-content>
+    <!-- show success notification -->
+    <v-snackbar v-model="snackbar.isActive" color="success" :timeout="timeout" dense top right>
+      {{ snackbar.text }}
+      <v-spacer></v-spacer>
+      <v-icon color="white" @click="snackbar.isActive = false">close</v-icon>
+    </v-snackbar>
 
     <!--Footer  -->
     <Footer />
@@ -17,6 +23,7 @@
 
 <script>
 // import Beers from './views/Beers'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
@@ -27,8 +34,12 @@ export default {
   },
 
   data: () => ({
+    timeout: 3000
     //
-  })
+  }),
+  computed: {
+    ...mapGetters(['snackbar'])
+  }
 }
 </script>
 

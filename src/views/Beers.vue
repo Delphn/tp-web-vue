@@ -2,6 +2,9 @@
   <v-container>
     <v-layout row>
       <v-flex xs10 offset-xs1>
+        <Alert v-if="error" @dismissed="onDismissed" :text="errorMessage"></Alert>
+      </v-flex>
+      <v-flex xs10 offset-xs1>
         <div class="mb-4">
           <span class="headline font-weight-bold">Liste des bières</span>
         </div>
@@ -30,7 +33,6 @@
             </v-icon>
           </template>
         </v-data-table>
-        <!-- <v-btn color="info" @click="getBeers">getBeers</v-btn> -->
       </v-flex>
     </v-layout>
   </v-container>
@@ -41,10 +43,15 @@ import store from '@/store'
 import { mapGetters } from 'vuex'
 
 export default {
-  components: { priceTTC: () => import('@/components/PriceTTC') },
+  components: {
+    priceTTC: () => import('@/components/PriceTTC'),
+    Alert: () => import('@/components/Alert')
+  },
   data() {
     return {
       beer: {},
+      beers: [],
+      errorMessage: '',
       headers: [
         {
           text: 'Identifiant',
@@ -61,21 +68,52 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.getBeers()
+  },
   computed: {
-    ...mapGetters(['beers'])
+    ...mapGetters(['error'])
   },
   methods: {
+    getBeers() {
+      store
+        .dispatch('getBeers')
+        .then(data => {
+          this.beers = data.body.content
+        })
+        .catch(error => {
+          store.commit('setError', error)
+          this.errorMessage = 'Impossible de récupérer les bières'
+        })
+    },
+    // updateBeer(beer) {
+    //   store.commit('setCurrentBeer', beer)
+    //   this.$router.push('/add-beer')
+    // },
     updateBeer(beer) {
-      store.commit('setCurrentBeer', beer)
-      this.$router.push('/add-beer')
+      store
+        .dispatch('getBeer', beer.id)
+        .then(() => {
+          this.$router.push('/add-beer')
+        })
+        .catch(error => {
+          store.commit('setError', error)
+          this.errorMessage = `Impossible de visualiser la bière ${beer.name}`
+        })
     },
     deleteBeer(beer) {
       confirm('Êtes-vous sûr de vouloir supprimer cette bière?') &&
-        store.commit('deleteBeer', beer)
+        store
+          .dispatch('deleteBeer', beer.id)
+          .then(() => this.getBeers())
+          .catch(error => {
+            store.commit('setError', error)
+            this.errorMessage = `Impossible de supprimer la bière ${beer.name}`
+          })
+    },
+    onDismissed() {
+      store.commit('clearError')
     }
-    // getBeers() {
-    //   store.dispatch('getBeers')
-    // }
   },
   filters: {
     capitalize(value) {
